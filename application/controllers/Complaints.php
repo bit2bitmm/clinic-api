@@ -70,14 +70,5 @@ class Complaints extends Admin_Controller
 		}
 
     }
-    
-    public function getComplaintHint()
-    {
-
-    	$complaints = $this->model_complaints->getComplaintHint();
-
-    	echo json_encode($complaints);
-
-    }
 
 }
