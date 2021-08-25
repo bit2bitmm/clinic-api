@@ -12,4 +12,13 @@ class Model_diagnosis extends MY_Model
     public $name;
 
 
+    public function getDiagnosis() {
+
+        $this->db->select('*');
+        $this->db->from('ra_diagnosis');
+        $query = $this->db->get();
+        return $query->result();
+    }
+
+
 }
