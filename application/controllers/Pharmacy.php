@@ -133,13 +133,14 @@ class Pharmacy extends Admin_Controller
 
 		if($this->input->post() && $product_id != '')
 		{
-				$product = $this->input->post(); 
+				$product = $this->input->post();
+
 				foreach($product as $key => $value)
 				$this->model_pharmacy->$key = $value;
 				$this->model_pharmacy->save();	
 				$this->model_pharmacy->updateDate($product_id);
 			
-				echo(json_encode(array('data' => $data , 'messageCode' => 1 , 'message' => 'Success')));
+				echo(json_encode(array('data' => 'Success' , 'messageCode' => 1 , 'message' => 'Success')));
 
 		}else{
 
