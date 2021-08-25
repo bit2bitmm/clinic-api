@@ -89,23 +89,59 @@
 
 	}
 
-	public function panel($patient_id=0)
+	public function panel1($patient_id=0)
 	{
-
 	    $this->data['complaint']    = $this->model_complaints->getComplaintData($patient_id);
-	    $this->data['examination']  = $this->model_examinations->getExaminationData($patient_id);
 	    $this->data['history']      = $this->model_historys->getHistoryData($patient_id);
 	    $this->data['investigation']  = $this->model_Investigations->getInvestigationData($patient_id);
-	    $this->data['diagnosis_data'] = $this->model_diagnosis->get();
-	    $this->data['diagnosis_patient'] = $this->model_diagpatients->getDiagnosisData($patient_id);
-	    $this->data['patient_data'] = $this->model_patients->getPatientData($patient_id);
-	    $this->data['med_patient']= $this->model_medpatients->get_by_fkey('patient_id',$patient_id,'desc',0);
-	    $this->data['pres_patient']= $this->model_prespatients->get_by_fkey('patient_id',$patient_id,'desc',0);
-		$this->data['invoice']= $this->model_medpatients->get_by_fkey('patient_id',$patient_id,'desc',0);
-		$user_id = $this->session->userdata('id');
-		$this->data['user_data'] = $this->model_users->getUserData($user_id);
-
+	   	
 		echo(json_encode(array('data' =>  $this->data, 'messageCode' => 1 , 'message' => 'Success')));
+	}
+
+	public function panel2($patient_id=0)
+	{
+		$this->data['examination']  = $this->model_examinations->getExaminationData($patient_id);
+ 		$this->data['diagnosis_data'] = $this->model_diagnosis->getDiagnosis();
+	    $this->data['diagnosis_patient'] = $this->model_diagpatients->getDiagnosisData($patient_id);
+		
+		echo(json_encode(array('data' => $this->data, 'messageCode' => 1, 'message' => 'Success')));
+	}
+
+	public function panel3($patient_id=0)
+	{
+		$this->data['med_patient']= $this->model_medpatients->get_by_fkey('patient_id',$patient_id,'desc',0);
+	    $this->data['pres_patient']= $this->model_prespatients->get_by_fkey('patient_id',$patient_id,'desc',0);
+
+		echo(json_encode(array('data' => $this->data, 'messageCode' => 1, 'message' => 'Success')));
+		
+	}
+
+
+	public function panelDataCreate() 
+	{
+		try {
+			if($this->input->post()) {
+				$this->model_complaints->patient_id = $this->input->post('patient_id');
+				$this->model_Investigations->patient_id = $this->input->post('patient_id');
+				$this->model_historys->patient_id = $this->input->post('patient_id');
+				$this->model_diagpatients->patient_id = $this->input->post('patient_id');
+				$this->model_complaints->complaint = $this->input->post('complaint');
+				$this->model_Investigations->investigation = $this->input->post('investigation');
+				$this->model_historys->history = $this->input->post('history');
+                $this->model_diagpatients->diagnosis = implode(",", $this->input->post('diagnosis'));
+				$this->model_complaints->save();
+				$this->model_Investigations->save();
+				$this->model_historys->save();
+				$this->model_diagpatients->save();
+
+				echo json_encode(array('complaint' =>$this->model_complaints,
+									    'Investigation' => $this->model_Investigations,
+										'History' => $this->model_historys,
+										'Diagnosis' => $this->model_diagpatients));
+			}
+		}catch(Exception $e){
+			echo(json_encode(array('data' => null, 'messageCode' => 0, 'message' => $e->getMessage())));
+		}
 	}
 
 	public function detail($patient_id=0)
